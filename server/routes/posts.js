@@ -1,7 +1,5 @@
 const express = require("express");
 const router = express.Router();
-const bcrypt = require("bcrypt");
-const User = require("../models/User");
 const Post = require("../models/Post");
 const Comment = require("../models/Comment");
 
@@ -47,8 +45,10 @@ router.get("/:id", async (req, res) => {
 });
 //GET ALL POSTs
 router.get("/", async (req, res) => {
+  const query = req.query;
   try {
-    const allPosts = await Post.findById();
+    const searchFilter = { title : {$regex: query.search, $options: "i"}}
+    const allPosts = await Post.find(query.search ? searchFilter : null);
     res.status(200).json(allPosts);
   } catch (err) {
     res.status(500).json(err);

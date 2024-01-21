@@ -2,9 +2,10 @@ const express = require("express");
 const router = express.Router();
 const Post = require("../models/Post");
 const Comment = require("../models/Comment");
+const verifyToken = require("../verifyToken.js");
 
 //Create
-router.post("/create", async (req, res) => {
+router.post("/create", verifyToken, async (req, res) => {
   try {
     const newPost = new Post(req.body);
     const savePost = await newPost.save();
@@ -16,7 +17,7 @@ router.post("/create", async (req, res) => {
 
 //Update
 // implement when user wants to update its password user must provide his prev password
-router.put("/:id", async (req, res) => {
+router.put("/:id", verifyToken, async (req, res) => {
   try {
     const updatedPost = await Post.findByIdAndUpdate(req.params.id,{ $set: req.body },{ new: true });
     res.status(200).json(updatedPost);
@@ -25,7 +26,7 @@ router.put("/:id", async (req, res) => {
   }
 });
 //Delete
-router.delete("/:id", async (req, res) => {
+router.delete("/:id", verifyToken, async (req, res) => {
   try {
     await Post.findByIdAndDelete(req.params.id);
     await Comment.deleteMany({ postId: req.params.id });

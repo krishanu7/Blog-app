@@ -9,17 +9,15 @@ import Profile from "./pages/Profile";
 
 const App = () => {
   return (
-    <div>
-      <Routes>
-        <Route exact path="/" element={<Home />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
-        <Route path="/write" element={<CreatePost />} />
-        <Route path="/posts/post/:id" element={<PostDetails />} />
-        <Route path="/edit/:id" element={<EditPost />} />
-        <Route path="/profile/:id" element={<Profile />} />
-      </Routes>
-    </div>
+    <Routes>
+      <Route exact path="/" element={<Home />} />
+      <Route path="/login" element={<Login />} />
+      <Route path="/register" element={<Register />} />
+      <Route path="/write" element={<CreatePost />} />
+      <Route path="/posts/post/:id" element={<PostDetails />} />
+      <Route path="/edit/:id" element={<EditPost />} />
+      <Route path="/profile/:id" element={<Profile />} />
+    </Routes>
   );
 };
 

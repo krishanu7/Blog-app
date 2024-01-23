@@ -24,7 +24,7 @@ router.post("/login", async (req, res) => {
     if (!user) {
       return res.status(404).json("User not found !");
     }
-    const match = await bcrypt.compareSync(req.body.password, user.password);
+    const match = await bcrypt.compare(req.body.password, user.password);
     if (!match) {
       return res.status(401).json("Wrong credentials!");
     }
@@ -33,6 +33,7 @@ router.post("/login", async (req, res) => {
       process.env.SECRET,
       { expiresIn: "3d" }
     );
+
     const { password, ...info } = user._doc;
     res.cookie("token", token).status(200).json(info);
   } catch (err) {
@@ -43,10 +44,24 @@ router.post("/login", async (req, res) => {
 //logout
 router.get("/logout", async (req, res) => {
   try {
-    res.clearCookie("token", { sameSite: "none", secure: true }).status(200).send("User logged out successfully!");
+    res
+      .clearCookie("token", { sameSite: "none", secure: true })
+      .status(200)
+      .send("User logged out successfully!");
   } catch (err) {
     res.status(500).json(err);
   }
 });
+//Refetch user
+router.get("/refetch", (req, res) => {
+  const token = req.cookies.token;
+  jwt.verify(token, process.env.SECRET, {}, async (err, data) => {
+    if(err){
+      return res.status(404).json(err);
+    }
+    res.status(200).json(data);
+  });
+})
+
 
 module.exports = router;

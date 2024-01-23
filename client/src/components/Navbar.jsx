@@ -3,9 +3,11 @@ import { IoSearchOutline } from "react-icons/io5";
 import { FaBars } from "react-icons/fa";
 import { useContext, useState } from 'react';
 import { UserContext } from '../context/UserContext';
+import axios from "axios";
+import { URL } from '../url';
 
 const Navbar = () => {
-    const { user } = useContext(UserContext);
+    const { user , setUser } = useContext(UserContext);
     const [isSearchOpen, setSearchOpen] = useState(false);
     const [showMenu, setShowMenu] = useState(false);
     const location = useLocation();
@@ -20,6 +22,14 @@ const Navbar = () => {
 
     const isActive = (pathname) => {
         return location.pathname === pathname;
+    }
+    const handleClick = async () => {
+        try{
+            const res = await axios.get(URL + "/api/auth/logout" , {withCredentials: true});
+            setUser(null);
+        }catch(err){
+            console.log(err);
+        }
     }
     return (
         <nav className="top-0 sticky w-full bg-white border-gray-200 dark:bg-gray-900">
@@ -76,6 +86,11 @@ const Navbar = () => {
                                     : <Link to="/register" className={`block py-2 px-3 rounded md:p-0 ${isActive('/register') ? 'text-blue-5 00 hover:bg-blue-400 md:hover:bg-gray-900 hover:text-white' : 'text-white hover:bg-blue-400 md:hover:text-blue-400 md:hover:bg-transparent md:p-0'}`}>Register</Link>
                             }
                         </li>
+                        {
+                            user && <li>
+                                <Link to="/" onClick={handleClick} className={`block py-2 px-3 rounded md:p-0 ${isActive('/logout') ? 'text-blue-500 hover:bg-blue-400 md:hover:bg-gray-900 hover:text-white' : 'text-white hover:bg-blue-400 md:hover:text-blue-400 md:hover:bg-transparent md:p-0'}`}>Logout</Link>
+                            </li>
+                        }
                     </ul>
                 </div>
             </div>

@@ -1,19 +1,27 @@
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { IoSearchOutline } from "react-icons/io5";
 import { FaBars } from "react-icons/fa";
-import { useContext, useState } from 'react';
+import { useContext, useState, useRef } from 'react';
 import { UserContext } from '../context/UserContext';
 import axios from "axios";
 import { URL } from '../url';
 
 const Navbar = () => {
-    const { user , setUser } = useContext(UserContext);
+    const { user, setUser } = useContext(UserContext);
     const [isSearchOpen, setSearchOpen] = useState(false);
     const [showMenu, setShowMenu] = useState(false);
     const location = useLocation();
+    const [promt, setPromt] = useState("");
+    const navigate = useNavigate()
+    const searchInputRef = useRef(null);
 
     const toggleSearch = () => {
         setSearchOpen(!isSearchOpen);
+        if (!isSearchOpen) {
+            setTimeout(() => {
+                searchInputRef.current.focus();
+            }, 0);
+        }
     };
 
     const toggleMenu = () => {
@@ -24,10 +32,10 @@ const Navbar = () => {
         return location.pathname === pathname;
     }
     const handleClick = async () => {
-        try{
-            const res = await axios.get(URL + "/api/auth/logout" , {withCredentials: true});
+        try {
+            const res = await axios.get(URL + "/api/auth/logout", { withCredentials: true });
             setUser(null);
-        }catch(err){
+        } catch (err) {
             console.log(err);
         }
     }
@@ -53,15 +61,22 @@ const Navbar = () => {
                     </button>
                 </div>
                 <div className={`relative item-center justify-center w-full md:w-[24%] lg:w-[24%] md:flex md:mx-auto md:order-1 mt-2 ${isSearchOpen ? 'block' : 'hidden'}`}>
-                    <div className="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
+                    <div className="absolute inset-y-0 start-0 flex items-center ps-3 cursor-pointer">
                         <IoSearchOutline className='text-lg font-bold text-slate-300' />
-                        <span className="sr-only">Search icon</span>
                     </div>
                     <input
+                        ref={searchInputRef}
                         type="text"
                         id="search-navbar"
                         className="block w-full p-2 ps-10 text-sm text-gray-900 border focus:outline-none  border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                         placeholder="Search..."
+                        onChange={(e) => { 
+                            setPromt((prevPromt) => {
+                                const newPromt = e.target.value;
+                                navigate(newPromt? `?search=${newPromt}` : "/");
+                                return newPromt;
+                            });
+                        }}
                     />
                 </div>
                 <div className={`items-center justify-between w-full md:flex md:w-auto md:order-2 ${showMenu ? 'block' : 'hidden'}`}>

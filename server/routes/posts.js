@@ -46,10 +46,15 @@ router.get("/:id", async (req, res) => {
 });
 //GET ALL POSTs
 router.get("/", async (req, res) => {
-  const query = req.query;
   try {
-    const searchFilter = { title : {$regex: query.search, $options: "i"}}
-    const allPosts = await Post.find(query.search ? searchFilter : null);
+    const searchTerm = req.query.search;
+    const regex = new RegExp(searchTerm,'i');
+    const searchFilter = { $or:[
+      {title: {$regex: regex}},
+      {description: {$regex: regex}},
+      {categories: {$in: [regex]}},
+    ],}
+    const allPosts = await Post.find(searchTerm ? searchFilter : null);
     res.status(200).json(allPosts);
   } catch (err) {
     res.status(500).json(err);

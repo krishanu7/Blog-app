@@ -6,7 +6,7 @@ import Loader from "../components/Loader"
 import { URL } from "../url";
 import { useContext, useEffect, useState } from "react"
 import { UserContext } from "../context/UserContext"
-import { useLocation } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 const Home = () => {
   const { search } = useLocation();
   const [posts, setPosts] = useState([]);
@@ -37,7 +37,11 @@ const Home = () => {
       <Navbar />
       <div className="flex-grow px-4 md:px-6">
         {loading ? <div className="h-[40vh] flex justify-center items-center"><Loader /></div> : !noResults ? (
-          posts.map((post) => <HomePosts key={post._id} post={post} />)
+          posts.map((post) => (
+            <Link key={post._id} to={user?`/posts/post/${post._id}` : "/login"}>
+              <HomePosts post={post} />
+            </Link>
+          ))
         ) : (
           <h1 className="text-center font-bold mt-[20%]">No posts available</h1>
         )}

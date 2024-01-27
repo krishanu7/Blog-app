@@ -6,6 +6,7 @@ import { UserContext } from '../context/UserContext';
 import axios from "axios";
 import { URL } from '../url';
 
+
 const Navbar = () => {
     const { user, setUser } = useContext(UserContext);
     const [isSearchOpen, setSearchOpen] = useState(false);
@@ -46,13 +47,13 @@ const Navbar = () => {
                     <span className="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">Blog Market</span>
                 </Link>
                 <div className="flex md:order-2">
-                    <button
+                    {location.pathname === "/" && <button
                         className="md:hidden ${isSearchOpen ? 'block' : 'hidden'} text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 rounded-lg text-sm p-2.5 me-1"
                         onClick={toggleSearch}
                     >
                         <IoSearchOutline className='text-2xl font-bold text-slate-300' />
                         <span className="sr-only">Search</span>
-                    </button>
+                    </button>}
                     <button
                         className="inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
                         onClick={toggleMenu}
@@ -60,7 +61,7 @@ const Navbar = () => {
                         <FaBars className='text-lg sm:text-xl' />
                     </button>
                 </div>
-                <div className={`relative item-center justify-center w-full md:w-[24%] lg:w-[24%] md:flex md:mx-auto md:order-1 mt-2 ${isSearchOpen ? 'block' : 'hidden'}`}>
+                {location.pathname === "/" && <div className={`relative item-center justify-center w-full md:w-[24%] lg:w-[24%] md:flex md:mx-auto md:order-1 mt-2 ${isSearchOpen ? 'block' : 'hidden'}`}>
                     <div className="absolute inset-y-0 start-0 flex items-center ps-3 cursor-pointer">
                         <IoSearchOutline className='text-lg font-bold text-slate-300' />
                     </div>
@@ -70,15 +71,15 @@ const Navbar = () => {
                         id="search-navbar"
                         className="block w-full p-2 ps-10 text-sm text-gray-900 border focus:outline-none  border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                         placeholder="Search..."
-                        onChange={(e) => { 
+                        onChange={(e) => {
                             setPromt((prevPromt) => {
                                 const newPromt = e.target.value;
-                                navigate(newPromt? `?search=${newPromt}` : "/");
+                                navigate(newPromt ? `?search=${newPromt}` : "/");
                                 return newPromt;
                             });
                         }}
                     />
-                </div>
+                </div>}
                 <div className={`items-center justify-between w-full md:flex md:w-auto md:order-2 ${showMenu ? 'block' : 'hidden'}`}>
                     <ul className="flex flex-col p-4 md:p-0 mt-4 mr-6 font-medium border border-gray-100 rounded-lg bg-gray-50 md:space-x-8 rtl:space-x-reverse md:flex-row md:mt-0 md:border-0 md:bg-white dark:bg-gray-800 md:dark:bg-gray-900 dark:border-gray-700">
                         <li>

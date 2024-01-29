@@ -1,2 +1,2 @@
-export const URL = "http://localhost:8080";
-export const IF = "http://localhost:8080/images";
+export const URL = "https://blog-market-fx3u.onrender.com";
+export const IF = "https://blog-market-fx3u.onrender.com/images";

@@ -96,9 +96,14 @@ const Navbar = () => {
                                 <Link to="/about" className={`block py-2 px-3 rounded md:p-0 ${isActive('/about') ? 'text-blue-500 hover:bg-blue-400 md:hover:bg-gray-900 hover:text-white' : 'text-white hover:bg-blue-400 md:hover:text-blue-400 md:hover:bg-transparent md:p-0'}`}>About</Link>
                             </li>
                         }
+                        {
+                            user && <li>
+                                <Link to={"/myblogs/"+user._id} className={`block py-2 px-3 rounded md:p-0 ${isActive('/myblogs') ? 'text-blue-500 hover:bg-blue-400 md:hover:bg-gray-900 hover:text-white' : 'text-white hover:bg-blue-400 md:hover:text-blue-400 md:hover:bg-transparent md:p-0'}`}>My Blogs</Link>
+                            </li>
+                        }
                         <li>
                             {
-                                user ? <Link to="/profile" className={`block py-2 px-3 rounded md:p-0 ${isActive('/profile') ? 'text-blue-500 hover:bg-blue-400 md:hover:bg-gray-900 hover:text-white' : 'text-white hover:bg-blue-400 md:hover:text-blue-400 md:hover:bg-transparent md:p-0'}`}>Profile</Link>
+                                user ? <Link to={`/profile/${user._id}`} className={`block py-2 px-3 rounded md:p-0 ${isActive('/profile') ? 'text-blue-500 hover:bg-blue-400 md:hover:bg-gray-900 hover:text-white' : 'text-white hover:bg-blue-400 md:hover:text-blue-400 md:hover:bg-transparent md:p-0'}`}>Profile</Link>
                                     : <Link to="/register" className={`block py-2 px-3 rounded md:p-0 ${isActive('/register') ? 'text-blue-5 00 hover:bg-blue-400 md:hover:bg-gray-900 hover:text-white' : 'text-white hover:bg-blue-400 md:hover:text-blue-400 md:hover:bg-transparent md:p-0'}`}>Register</Link>
                             }
                         </li>

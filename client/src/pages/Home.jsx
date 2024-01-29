@@ -15,6 +15,7 @@ const Home = () => {
   const [loading, setLoading] = useState(false);
 
   const fetchPosts = async () => {
+
     setLoading(true);
     try {
       const res = await axios.get(URL + "/api/posts/" + search);

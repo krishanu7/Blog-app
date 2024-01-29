@@ -20,7 +20,7 @@ app.use("/images", express.static(path.join(__dirname, "images")));
 
 app.use(
   cors({
-    origin: "http://localhost:5173",
+    origin: "https://blog-app-seven-smoky.vercel.app/",
     methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
     credentials: true,
   })

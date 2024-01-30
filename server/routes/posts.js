@@ -60,10 +60,10 @@ router.get("/", async (req, res) => {
     res.status(500).json(err);
   }
 });
-//GET USER POSTS
+// GET USER POSTS
 router.get("/user/:userId", async (req, res) => {
   try {
-    const userPosts = await Post.findById({ userId: req.params.userId });
+    const userPosts = await Post.find({ userId: req.params.userId });
     res.status(200).json(userPosts);
   } catch (err) {
     res.status(500).json(err);

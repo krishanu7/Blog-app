@@ -1,25 +1,22 @@
-import axios from "axios";
-import { createContext, useEffect, useState } from "react";
-import { URL } from "../url";
+import { createContext, useEffect, useReducer } from "react";
+import { AuthReducer } from "../reducer/AuthReducer.jsx"
 
-export const UserContext = createContext();
+const INTIAL_STATE = {
+  user: (localStorage.getItem('user') !== undefined) ? JSON.parse(localStorage.getItem('user')) : null,
+  token: localStorage.getItem('token') || null,
+}
+
+export const UserContext = createContext(INTIAL_STATE);
 
 export const UserProvider = ({ children }) => {
-  const [user, setUser] = useState(null);
+  const [state, dispatch] = useReducer(AuthReducer, INTIAL_STATE);
 
-  const getUser = async () => {
-    try{
-      const res = await axios.get(URL + "/api/auth/refetch", {withCredentials: true});
-      setUser(res.data); //after refreshing user will not automatic logged out
-    }catch(err){
-      console.log(err);
-    }
-  }
   useEffect(() => {
-    getUser();
-  },[])
+    localStorage.setItem('user', JSON.stringify(state.user));
+    localStorage.setItem('token', state.token);
+  }, [state])
   return (
-    <UserContext.Provider value={{ user, setUser }}>
+    <UserContext.Provider value={{ user: state.user, token: state.token, dispatch }}>
       {children}
     </UserContext.Provider>
   );

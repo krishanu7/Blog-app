@@ -6,7 +6,7 @@ import { useContext, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom"
 import { UserContext } from "../context/UserContext";
 import axios from "axios";
-import { URL } from "../url";
+import { URL, token } from "../url";
 
 const CreatePost = () => {
     const postId = useParams().id;
@@ -18,7 +18,7 @@ const CreatePost = () => {
     const [cats, setCats] = useState([]);
     const { user } = useContext(UserContext);
     const navigate = useNavigate();
-
+    const config = {headers: {'Authorization': `Bearer ${token}`}};
     const fetchPost = async () => {
         const post = await axios.get(URL + "/api/posts/" + postId);
         //console.log(post.data);
@@ -64,7 +64,7 @@ const CreatePost = () => {
             }
         }
         try {
-            const res = await axios.put(URL + "/api/posts/" + postId, post, { withCredentials: true });
+            const res = await axios.put(URL + "/api/posts/" + postId, post, config);
             navigate("/posts/post/" + res.data._id);
         } catch (err) {
             console.log(err);

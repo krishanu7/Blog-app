@@ -4,10 +4,9 @@ const User = require("../models/User");
 const bcrypt = require("bcrypt");
 const Post = require("../models/Post");
 const Comment = require("../models/Comment");
-const verifyToken = require("../verifyToken.js");
+const verifyToken = require("../middleware/verifyToken.js");
 
 //Update
-// implement when user wants to update its password user must provide his prev password
 router.put("/:id",verifyToken, async (req, res) => {
   try {
     if (req.body.password) {
@@ -19,14 +18,16 @@ router.put("/:id",verifyToken, async (req, res) => {
       { $set: req.body },
       { new: true }
     );
-    res.status(200).json(updatedUser);
+    const { password, token, ...info } = updatedUser._doc;
+    res
+      .status(200)
+      .json({ status: true, message: "successfully updated", data: {...info} });
   } catch (err) {
     res.status(500).json(err);
   }
 });
 
 //Delete
-
 router.delete("/:id", verifyToken, async (req, res) => {
   try {
     await User.findByIdAndDelete(req.params.id);
@@ -39,7 +40,6 @@ router.delete("/:id", verifyToken, async (req, res) => {
 });
 
 //Get User
-
 router.get("/:id", async (req, res) => {
     try {
       const user = await User.findById(req.params.id);

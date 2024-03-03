@@ -2,7 +2,7 @@ import { Link, useNavigate } from "react-router-dom"
 import Footer from "../components/Footer"
 import { IoEyeOutline } from "react-icons/io5";
 import { AiOutlineEyeInvisible } from "react-icons/ai";
-import { useContext, useState } from "react"
+import { useContext, useEffect, useState } from "react"
 import axios from "axios";
 import { URL } from "../url.js"
 import { UserContext } from "../context/UserContext.jsx";
@@ -14,11 +14,15 @@ const Login = () => {
     const [error, setError] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
     const navigate = useNavigate()
-    const { setUser } = useContext(UserContext);
-    const handleLogin = async () => {
+    const { dispatch } = useContext(UserContext);
+
+    const handleLogin = async (e) => {
+        e.preventDefault();
         try {
-            const res = await axios.post(URL + "/api/auth/login", { email, password }, { withCredentials: true });
-            setUser(res.data);
+            const res = await axios.post(URL + "/api/auth/login", { email, password });
+            const { token } = res.data;
+            const user = res.data.data;
+            dispatch({ type: "LOGIN_SUCCESS", payload: { user, token } })
             navigate("/");
         } catch (err) {
             setError(true);

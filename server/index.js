@@ -14,17 +14,14 @@ const commentRoute = require("./routes/comments");
 
 //middlewares
 dotenv.config();
+const corsOptions = {
+  origin: true,
+};
 app.use(express.json());
 app.use(cookieParser());
 app.use("/images", express.static(path.join(__dirname, "images"))); 
 
-app.use(
-  cors({
-    origin: "https://blog-app-seven-smoky.vercel.app",
-    methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
-    credentials: true,
-  })
-);
+app.use(cors(corsOptions));
 
 app.use("/api/auth", authRoute);
 app.use("/api/users", userRoute);

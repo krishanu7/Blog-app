@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const Post = require("../models/Post");
 const Comment = require("../models/Comment");
-const verifyToken = require("../verifyToken.js");
+const verifyToken = require("../middleware/verifyToken.js");
 
 //Create
 router.post("/create", verifyToken, async (req, res) => {
@@ -16,7 +16,6 @@ router.post("/create", verifyToken, async (req, res) => {
 });
 
 //Update
-// implement when user wants to update its password user must provide his prev password
 router.put("/:id", verifyToken, async (req, res) => {
   try {
     const updatedPost = await Post.findByIdAndUpdate(req.params.id,{ $set: req.body },{ new: true });

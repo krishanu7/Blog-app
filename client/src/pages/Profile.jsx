@@ -3,19 +3,19 @@ import Footer from "../components/Footer"
 import Navbar from "../components/Navbar"
 import ProfilePosts from "../components/ProfilePosts"
 import axios from "axios"
-import { IF, URL } from "../url"
+import { IF, URL, token } from "../url"
 import { UserContext } from "../context/UserContext"
 import { useNavigate, useParams } from "react-router-dom"
 
 const Profile = () => {
     const param = useParams().id;
-    const { user, setUser } = useContext(UserContext);
+    const { user, dispatch } = useContext(UserContext);
     const [username, setUsername] = useState(user?.username || '');
     const [email, setEmail] = useState(user?.email || '');
     const navigate = useNavigate();
     const [posts, setPosts] = useState([]);
     const [updated, setUpdated] = useState(false);
-
+    const config = {headers: {'Authorization': `Bearer ${token}`}};
     useEffect(() => {
         const fetchData = async () => {
             if (user && user._id) {
@@ -33,13 +33,15 @@ const Profile = () => {
 
         fetchData();
     }, [user]);
-
+    
     const handleUpdateUser = async () => {
         const isConfirmed = window.confirm("Are you sure you want to update your profile?");
         if (isConfirmed) {
             setUpdated(false);
             try {
-                const res = await axios.put(URL + "/api/users/" + user._id, { username, email, password }, { withCredentials: true });
+                const res = await axios.put(URL + "/api/users/" + user._id, { username, email }, config);
+                const updatedUser = res.data;
+                dispatch({type: "UPDATE_USER", payload: updatedUser })
                 setUpdated(true);
             } catch (err) {
                 console.log(err);
@@ -52,8 +54,8 @@ const Profile = () => {
         const isConfirmed = window.confirm("Are you sure you want to delete your account?");
         if (isConfirmed) {
             try {
-                const res = await axios.delete(URL + "/api/users/" + user._id, { withCredentials: true });
-                setUser(null);
+                const res = await axios.delete(URL + "/api/users/" + user._id, config);
+                dispatch({ type: "LOGOUT" });
                 navigate("/");
             } catch (err) {
                 console.log(err);

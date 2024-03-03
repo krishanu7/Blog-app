@@ -3,12 +3,9 @@ import { IoSearchOutline } from "react-icons/io5";
 import { FaBars } from "react-icons/fa";
 import { useContext, useState, useRef } from 'react';
 import { UserContext } from '../context/UserContext';
-import axios from "axios";
-import { URL } from '../url';
-
 
 const Navbar = () => {
-    const { user, setUser } = useContext(UserContext);
+    const { user, dispatch } = useContext(UserContext);
     const [isSearchOpen, setSearchOpen] = useState(false);
     const [showMenu, setShowMenu] = useState(false);
     const location = useLocation();
@@ -34,8 +31,7 @@ const Navbar = () => {
     }
     const handleClick = async () => {
         try {
-            const res = await axios.get(URL + "/api/auth/logout", { withCredentials: true });
-            setUser(null);
+            dispatch({type: "LOGOUT"});
         } catch (err) {
             console.log(err);
         }

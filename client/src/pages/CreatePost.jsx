@@ -6,7 +6,7 @@ import { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom"
 import { UserContext } from "../context/UserContext";
 import axios from "axios";
-import { URL } from "../url";
+import { URL, token } from "../url";
 
 const CreatePost = () => {
     const [title, setTitle] = useState("");
@@ -16,7 +16,7 @@ const CreatePost = () => {
     const [cats, setCats] = useState([]);
     const { user } = useContext(UserContext);
     const navigate = useNavigate();
-
+    const config = {headers: {'Authorization': `Bearer ${token}`}};
     const deleteCategory = (categoryToDelete) => {
         setCats(prevCats => prevCats.filter(category => category !== categoryToDelete));
     }
@@ -49,7 +49,7 @@ const CreatePost = () => {
             }
         }
         try {
-            const res = await axios.post(URL + "/api/posts/create", post, { withCredentials: true });
+            const res = await axios.post(URL + "/api/posts/create", post, config);
             navigate("/posts/post/" + res.data._id);
         } catch (err) {
             console.log(err);

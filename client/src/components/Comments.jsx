@@ -4,16 +4,18 @@ import { FiEdit } from "react-icons/fi";
 import { UserContext } from '../context/UserContext';
 import { useState, useContext } from 'react';
 import axios from 'axios';
-import { URL } from "../url"
+import { URL, token } from "../url"
 
 const Comments = ({ c, authorId, comments, setComments }) => {
     const { user } = useContext(UserContext);
     const [isEditing, setIsEditing] = useState(false);
     const [editedComment, setEditedComment] = useState(c.comment);
     const commentRef = useRef();
+    const config = {headers: {'Authorization': `Bearer ${token}`}};
+
     const handleDeleteComment = async (id) => {
         try {
-            await axios.delete(URL + "/api/comments/" + id, { withCredentials: true });
+            await axios.delete(URL + "/api/comments/" + id, config);
             setComments(comments.filter(comment => comment._id !== id));
         } catch (err) {
             console.log(err);
@@ -21,7 +23,7 @@ const Comments = ({ c, authorId, comments, setComments }) => {
     }
     const handleUpdateComment = async (id) => {
         try {
-            await axios.put(URL + "/api/comments/" + id, { comment: editedComment }, { withCredentials: true });
+            await axios.put(URL + "/api/comments/" + id, { comment: editedComment }, config);
             setComments(comments.map(comment => (comment._id === id ? { ...comment, comment: editedComment } : comment)));
             setIsEditing(false);
         } catch (err) {

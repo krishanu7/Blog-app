@@ -1,6 +1,6 @@
 import { useNavigate, useParams } from "react-router-dom"
 import { useContext, useEffect, useState } from "react";
-import { URL, IF } from "../url";
+import { URL, IF, token } from "../url";
 import Loader from "../components/Loader";
 import axios from 'axios';
 import Footer from "../components/Footer";
@@ -18,7 +18,7 @@ const PostDetails = () => {
     const { user } = useContext(UserContext);
     const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
-
+    const config = {headers: {'Authorization': `Bearer ${token}`}};
     const fetch = async () => {
         setLoading(true);
         try {
@@ -45,8 +45,7 @@ const PostDetails = () => {
 
     const handlePostDeletion = async () => {
         try {
-            const res = await axios.delete(URL + "/api/posts/" + postId, { withCredentials: true });
-            // console.log(res.data);
+            const res = await axios.delete(URL + "/api/posts/" + postId, config);
             navigate("/");
         } catch (err) {
             console.log(err);
@@ -55,7 +54,7 @@ const PostDetails = () => {
     const handlePostComment = async (e) => {
         e.preventDefault();
         try {
-            const res = await axios.post(URL + "/api/comments/create", { comment, author: user.username, postId, userId: user._id }, { withCredentials: true });
+            const res = await axios.post(URL + "/api/comments/create", { comment, author: user.username, postId, userId: user._id }, config);
             setComment("");
         } catch (err) {
             console.log(err);

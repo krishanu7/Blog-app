@@ -41,24 +41,5 @@ const login = async (req, res) => {
   }
 };
 
-const logout = async (req, res) => {
-  try {
-    res
-      .clearCookie("token", { sameSite: "none", secure: true })
-      .status(200)
-      .send("User logged out successfully!");
-  } catch (err) {
-    res.status(500).json(err);
-  }
-};
 
-const refetch = async (req, res) => {
-  const token = req.cookies.token;
-  jwt.verify(token, process.env.SECRET, {}, async (err, data) => {
-    if (err) {
-      return res.status(404).json(err);
-    }
-    res.status(200).json(data);
-  });
-};
-module.exports = { register, login, logout , refetch};
+module.exports = { register, login };

@@ -4,7 +4,6 @@ const CommentSchema = new mongoose.Schema(
   {
     comment: {
       type: String,
-      unique: true,
     },
     author: {
       type: String,

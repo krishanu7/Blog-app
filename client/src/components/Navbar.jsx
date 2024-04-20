@@ -21,7 +21,6 @@ const Navbar = () => {
             }, 0);
         }
     };
-
     const toggleMenu = () => {
         setShowMenu(!showMenu);
     };
@@ -44,7 +43,7 @@ const Navbar = () => {
                 </Link>
                 <div className="flex md:order-2">
                     {location.pathname === "/" && <button
-                        className="md:hidden ${isSearchOpen ? 'block' : 'hidden'} text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 rounded-lg text-sm p-2.5 me-1"
+                        className="md:hidden text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 rounded-lg text-sm p-2.5 me-1"
                         onClick={toggleSearch}
                     >
                         <IoSearchOutline className='text-2xl font-bold text-slate-300' />
@@ -68,7 +67,7 @@ const Navbar = () => {
                         className="block w-full p-2 ps-10 text-sm text-gray-900 border focus:outline-none  border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                         placeholder="Search..."
                         onChange={(e) => {
-                            setPromt((prevPromt) => {
+                            setPromt(() => {
                                 const newPromt = e.target.value;
                                 navigate(newPromt ? `?search=${newPromt}` : "/");
                                 return newPromt;

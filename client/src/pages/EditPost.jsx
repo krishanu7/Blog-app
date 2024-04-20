@@ -36,7 +36,7 @@ const CreatePost = () => {
     }
 
     const addCategory = () => {
-        console.log(file.name);
+        //console.log(file.name);
         if (!cat.trim()) return;
         setCats(prevCats => [...prevCats, cat.trim()]);
         setCat("");
